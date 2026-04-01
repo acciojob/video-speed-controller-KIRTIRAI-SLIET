@@ -15,7 +15,7 @@
 // const progressBar = document.querySelector(".progress__filled");
 
 document.addEventListener("DOMContentLoaded", () => {
-	const video = document.querySelector(".viewer");
+    const video = document.querySelector(".player__video");
 	const toggle = document.querySelector(".toggle");
 	const skipButtons = document.querySelectorAll("[data-skip]");
 	const ranges = document.querySelectorAll(".player__slider");
