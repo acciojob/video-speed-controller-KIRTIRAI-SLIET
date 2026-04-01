@@ -1,67 +1,69 @@
-const inputs = document.querySelectorAll('.controls input');
+// const inputs = document.querySelectorAll('.controls input');
 
-    function handleUpdate() {
-      const suffix = this.dataset.sizing || '';
-      document.documentElement.style.setProperty(`--${this.name}`, this.value + suffix);
-    }
+//     function handleUpdate() {
+//       const suffix = this.dataset.sizing || '';
+//       document.documentElement.style.setProperty(`--${this.name}`, this.value + suffix);
+//     }
 
-    inputs.forEach(input => input.addEventListener('change', handleUpdate));
-    inputs.forEach(input => input.addEventListener('mousemove', handleUpdate));
-const video = document.querySelector(".viewer");
-const toggle = document.querySelector(".toggle");
-const skipButtons = document.querySelectorAll("[data-skip]");
-const ranges = document.querySelectorAll(".player__slider");
-const progress = document.querySelector(".progress");
-const progressBar = document.querySelector(".progress__filled");
+//     inputs.forEach(input => input.addEventListener('change', handleUpdate));
+//     inputs.forEach(input => input.addEventListener('mousemove', handleUpdate));
+// const video = document.querySelector(".viewer");
+// const toggle = document.querySelector(".toggle");
+// const skipButtons = document.querySelectorAll("[data-skip]");
+// const ranges = document.querySelectorAll(".player__slider");
+// const progress = document.querySelector(".progress");
+// const progressBar = document.querySelector(".progress__filled");
 
-// ▶️ Play / Pause
-function togglePlay() {
-	if (video.paused) {
-		video.play();
-	} else {
-		video.pause();
+document.addEventListener("DOMContentLoaded", () => {
+	const video = document.querySelector(".viewer");
+	const toggle = document.querySelector(".toggle");
+	const skipButtons = document.querySelectorAll("[data-skip]");
+	const ranges = document.querySelectorAll(".player__slider");
+	const progress = document.querySelector(".progress");
+	const progressBar = document.querySelector(".progress__filled");
+
+	if (!video || !toggle || !progress || !progressBar) return;
+
+	function togglePlay() {
+		video.paused ? video.play() : video.pause();
 	}
-}
 
-// Update button icon
-function updateButton() {
-	toggle.textContent = video.paused ? "►" : "❚ ❚";
-}
+	function updateButton() {
+		toggle.textContent = video.paused ? "►" : "❚ ❚";
+	}
 
-// ⏩ Skip
-function skip() {
-	video.currentTime += parseFloat(this.dataset.skip);
-}
+	function skip() {
+		video.currentTime += parseFloat(this.dataset.skip);
+	}
 
-// 🔊 Volume & Speed
-function handleRangeUpdate() {
-	video[this.name] = this.value;
-}
+	function handleRangeUpdate() {
+		video[this.name] = this.value;
+	}
 
-// 📊 Progress bar update
-function handleProgress() {
-	const percent = (video.currentTime / video.duration) * 100;
-	progressBar.style.flexBasis = `${percent}%`;
-}
+	function handleProgress() {
+		const percent = (video.currentTime / video.duration) * 100;
+		progressBar.style.flexBasis = `${percent}%`;
+	}
 
-// 🎯 Click to seek
-function scrub(e) {
-	const scrubTime = (e.offsetX / progress.offsetWidth) * video.duration;
-	video.currentTime = scrubTime;
-}
+	function scrub(e) {
+		const scrubTime = (e.offsetX / progress.offsetWidth) * video.duration;
+		video.currentTime = scrubTime;
+	}
 
-// Event listeners
-video.addEventListener("click", togglePlay);
-video.addEventListener("play", updateButton);
-video.addEventListener("pause", updateButton);
+	video.addEventListener("click", togglePlay);
+	video.addEventListener("play", updateButton);
+	video.addEventListener("pause", updateButton);
 
-toggle.addEventListener("click", togglePlay);
+	toggle.addEventListener("click", togglePlay);
 
-skipButtons.forEach(btn => btn.addEventListener("click", skip));
+	skipButtons.forEach(btn => btn.addEventListener("click", skip));
 
-ranges.forEach(range => range.addEventListener("change", handleRangeUpdate));
-ranges.forEach(range => range.addEventListener("mousemove", handleRangeUpdate));
+	ranges.forEach(range => {
+		range.addEventListener("change", handleRangeUpdate);
+		range.addEventListener("mousemove", handleRangeUpdate);
+	});
 
-video.addEventListener("timeupdate", handleProgress);
+	video.addEventListener("timeupdate", handleProgress);
 
-progress.addEventListener("click", scrub);
+	progress.addEventListener("click", scrub);
+});
